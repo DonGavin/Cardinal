@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Your Flight — Cardinal Air</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Barlow+Condensed:wght@300;400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── TOKENS ──────────────────────────────────────────────────── */
+:root {
+  --red:        #B8232A;
+  --red-deep:   #7A1519;
+  --red-bright: #D93030;
+  --cream:      #F5F0E8;
+  --warm-white: #FAF8F4;
+  --ink:        #1A1410;
+  --ink-mid:    #3A2E28;
+  --ink-soft:   #6B5C52;
+  --gold:       #C9A96E;
+  --gold-light: #E8D5A3;
+  --border:     rgba(201,169,110,0.22);
+  --border-lit: rgba(201,169,110,0.55);
+  --panel:      rgba(245,240,232,0.04);
+  --panel-lit:  rgba(245,240,232,0.07);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ─────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ── NAV ───────────────────────────────────────────────────── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 56px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
+}
+
+.logo-mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-icon {
+  width: 40px; height: 40px;
+  border: 2px solid var(--red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(184,35,42,0.15);
+}
+.logo-icon svg { width: 20px; height: 20px; fill: white; }
+.logo-wordmark { display: flex; flex-direction: column; line-height: 1; }
+.logo-primary {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 20px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: white;
+}
+.logo-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--gold); margin-top: 2px;
+}
+
+.nav-back {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,240,232,0.5);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--gold); }
+.nav-back svg { transform: rotate(180deg); }
+
+/* ── PAGE HEADER ───────────────────────────────────────────── */
+.page-header {
+  padding: 64px 56px 48px;
+  position: relative;
+  z-index: 2;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to bottom, rgba(184,35,42,0.07) 0%, transparent 100%);
+}
+
+.page-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.page-eyebrow::before {
+  content: ''; width: 24px; height: 1px;
+  background: var(--red); display: inline-block;
+}
+
+.page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(52px, 7vw, 90px);
+  font-weight: 800; text-transform: uppercase;
+  letter-spacing: -0.01em; line-height: 0.92;
+  color: white;
+}
+.page-title em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  color: var(--gold); font-size: 0.85em;
+}
+
+.page-sub {
+  font-family: 'Barlow', sans-serif;
+  font-size: 16px; font-weight: 300;
+  color: rgba(245,240,232,0.5);
+  margin-top: 18px;
+}
+
+/* ── STEP INDICATOR ────────────────────────────────────────── */
+.steps {
+  display: flex;
+  gap: 0;
+  padding: 0 56px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 2;
+}
+
+.step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 32px 20px 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(245,240,232,0.3);
+  position: relative;
+  transition: color 0.3s;
+}
+.step.active  { color: var(--gold); }
+.step.done    { color: rgba(245,240,232,0.5); }
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  transition: background 0.3s, border-color 0.3s;
+}
+.step.active .step-num  { background: var(--red); border-color: var(--red); color: white; }
+.step.done .step-num    { background: rgba(245,240,232,0.15); }
+.step-sep {
+  width: 32px; height: 1px;
+  background: var(--border);
+  align-self: center;
+  margin: 0 -4px;
+}
+
+
+/* ── MAIN LAYOUT ───────────────────────────────────────────── */
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 0;
+  min-height: calc(100vh - 200px);
+  position: relative;
+  z-index: 2;
+}
+
+.booking-main {
+  padding: 56px;
+  border-right: 1px solid var(--border);
+}
+
+.booking-sidebar {
+  padding: 56px 40px;
+  background: rgba(245,240,232,0.025);
+  position: sticky;
+  top: 0;
+  height: fit-content;
+}
+
+/* ── FORM SECTIONS ─────────────────────────────────────────── */
+.form-section {
+  margin-bottom: 48px;
+}
+.form-section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.form-section-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border); display: inline-block;
+}
+
+/* ROUTE SELECT ROW */
+.route-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.route-arrow {
+  font-size: 22px; color: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+}
+.route-arrow svg { width: 22px; height: 22px; stroke: var(--red); fill: none; stroke-width: 2; }
+
+.field-wrap { display: flex; flex-direction: column; gap: 6px; }
+.field-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(245,240,232,0.4);
+}
+select, input[type="text"], input[type="number"] {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 14px 18px;
+  width: 100%;
+  appearance: none;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  border-radius: 2px;
+}
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A96E' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px; }
+select:focus, input:focus { border-color: var(--gold); background: var(--panel-lit); }
+select option { background: #1A1410; color: var(--cream); }
+
+.passengers-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+}
+
+/* ── CALENDAR ──────────────────────────────────────────────── */
+.cal-outer {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.cal-tabs {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.cal-tab {
+  padding: 14px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,240,232,0.4);
+  border: none; background: none; cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  border-right: 1px solid var(--border);
+  text-align: left;
+}
+.cal-tab:last-child { border-right: none; }
+.cal-tab.active {
+  color: var(--gold);
+  background: rgba(201,169,110,0.06);
+}
+.cal-tab-date {
+  display: block;
+  font-size: 18px; font-weight: 700;
+  color: white; letter-spacing: 0;
+  margin-top: 4px;
+}
+.cal-tab.active .cal-tab-date { color: var(--gold); }
+
+.cal-grid-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.cal-month-panel { padding: 24px; border-right: 1px solid var(--border); }
+.cal-month-panel:last-child { border-right: none; }
+
+.cal-month-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.cal-month-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: white;
+}
+.cal-nav-btn {
+  background: none; border: 1px solid var(--border); color: var(--cream);
+  width: 28px; height: 28px; cursor: pointer; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: border-color 0.2s, color 0.2s;
+}
+.cal-nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.cal-dow {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  margin-bottom: 8px;
+}
+.cal-dow span {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,240,232,0.3);
+  text-align: center; padding: 4px 0;
+}
+.cal-days {
+  display: grid; grid-template-columns: repeat(7,1fr); gap: 2px;
+}
+.cal-day {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 400;
+  color: rgba(245,240,232,0.7);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  position: relative;
+  border: 1px solid transparent;
+}
+.cal-day:hover:not(.empty):not(.past) {
+  background: rgba(201,169,110,0.12);
+  color: white;
+  border-color: var(--border);
+}
+.cal-day.empty { cursor: default; pointer-events: none; }
+.cal-day.past  { color: rgba(245,240,232,0.18); cursor: default; pointer-events: none; }
+.cal-day.today { color: var(--gold); font-weight: 700; }
+.cal-day.today::after {
+  content: ''; position: absolute;
+  bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold);
+}
+.cal-day.selected-start, .cal-day.selected-end {
+  background: var(--red) !important;
+  color: white !important;
+  border-color: var(--red-bright) !important;
+  font-weight: 700;
+}
+.cal-day.in-range {
+  background: rgba(184,35,42,0.15);
+  color: rgba(245,240,232,0.9);
+  border-radius: 0;
+}
+
+/* ── FLIGHT CLASS ──────────────────────────────────────────── */
+.class-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+}
+.class-card {
+  border: 1px solid var(--border);
+  padding: 20px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  border-radius: 2px;
+  position: relative;
+}
+.class-card:hover { border-color: rgba(201,169,110,0.4); background: var(--panel); }
+.class-card.selected {
+  border-color: var(--red);
+  background: rgba(184,35,42,0.08);
+}
+.class-card.selected::before {
+  content: '✓';
+  position: absolute; top: 8px; right: 10px;
+  font-size: 11px; color: var(--red);
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.class-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: white; margin-bottom: 6px;
+}
+.class-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; font-weight: 800;
+  color: var(--gold); letter-spacing: -0.01em;
+}
+.class-price span { font-size: 13px; color: rgba(245,240,232,0.4); font-weight: 400; }
+.class-perks {
+  font-size: 12px; color: rgba(245,240,232,0.4);
+  margin-top: 8px; line-height: 1.6; font-weight: 300;
+}
+
+/* ── SIDEBAR SUMMARY ───────────────────────────────────────── */
+.sidebar-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+}
+
+.summary-route {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 24px;
+}
+.summary-city {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px; font-weight: 800;
+  color: white; letter-spacing: 0.05em;
+}
+.summary-arrow { color: var(--red); font-size: 20px; }
+
+.summary-line {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201,169,110,0.1);
+  font-size: 14px;
+}
+.summary-key {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,240,232,0.35);
+}
+.summary-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 600; color: white;
+}
+.summary-val.empty { color: rgba(245,240,232,0.3); font-weight: 300; }
+
+.price-total {
+  margin-top: 28px; padding: 20px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 2px;
+}
+.price-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(245,240,232,0.4); margin-bottom: 8px;
+}
+.price-amount {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 42px; font-weight: 800;
+  color: white; letter-spacing: -0.02em; line-height: 1;
+}
+.price-amount span { font-size: 20px; color: var(--gold); }
+.price-note {
+  font-size: 12px; color: rgba(245,240,232,0.3);
+  margin-top: 6px; font-weight: 300;
+}
+
+.btn-book {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; margin-top: 20px;
+  background: var(--red);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  padding: 18px 24px;
+  border: 1px solid var(--red);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, border-color 0.2s, gap 0.2s;
+}
+.btn-book:hover {
+  background: var(--red-deep);
+  border-color: var(--red-deep);
+  gap: 16px;
+}
+.btn-book:disabled {
+  background: rgba(245,240,232,0.08);
+  border-color: rgba(245,240,232,0.1);
+  color: rgba(245,240,232,0.25);
+  cursor: not-allowed;
+  gap: 10px;
+}
+
+.sidebar-note {
+  font-size: 11px; color: rgba(245,240,232,0.25);
+  text-align: center; margin-top: 14px; line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ── CONFIRMATION SCREEN ───────────────────────────────────── */
+#confirmationScreen {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--ink);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  animation: fadeIn 0.6s ease forwards;
+}
+#confirmationScreen.show { display: flex; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.confirm-bird {
+  width: 80px; height: 80px;
+  border: 2px solid var(--red);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(184,35,42,0.12);
+  margin-bottom: 32px;
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184,35,42,0.4); }
+  50%       { box-shadow: 0 0 0 18px rgba(184,35,42,0); }
+}
+.confirm-bird svg { width: 38px; height: 38px; fill: white; }
+
+.confirm-check {
+  width: 56px; height: 56px;
+  background: rgba(42,122,58,0.15);
+  border: 1px solid rgba(42,122,58,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px;
+  animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+}
+@keyframes scaleIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.confirm-check svg { width: 26px; height: 26px; stroke: #4CAF50; fill: none; stroke-width: 2.5; }
+
+.confirm-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 16px;
+}
+
+.confirm-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(36px, 5vw, 64px); font-weight: 800;
+  text-transform: uppercase; line-height: 0.95;
+  letter-spacing: -0.01em; color: white;
+  margin-bottom: 14px;
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+.confirm-title em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-weight: 400;
+  color: var(--gold); font-size: 0.9em;
+}
+
+.confirm-message {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 26px);
+  color: rgba(245,240,232,0.7);
+  margin-bottom: 40px;
+  max-width: 520px;
+  animation: fadeUp 0.7s ease 0.55s both;
+  line-height: 1.5;
+}
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+.confirm-details {
+  display: flex; gap: 48px;
+  border: 1px solid var(--border);
+  padding: 28px 48px;
+  margin-bottom: 40px;
+  border-radius: 2px;
+  background: var(--panel);
+  animation: fadeUp 0.7s ease 0.65s both;
+}
+.confirm-detail { text-align: center; }
+.confirm-detail-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(245,240,232,0.35); margin-bottom: 6px;
+}
+.confirm-detail-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 700; color: white;
+}
+
+.confirm-code {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 36px; font-weight: 800;
+  letter-spacing: 0.25em; color: var(--gold);
+  margin-bottom: 8px;
+}
+.confirm-code-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(245,240,232,0.35); margin-bottom: 36px;
+}
+
+.confirm-actions {
+  display: flex; gap: 16px;
+  animation: fadeUp 0.7s ease 0.8s both;
+}
+.btn-outline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 14px 28px;
+  border: 1px solid var(--border);
+  background: none; color: rgba(245,240,232,0.6);
+  cursor: pointer; border-radius: 2px;
+  transition: border-color 0.2s, color 0.2s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+.ticket-strip {
+  width: 100%;
+  max-width: 560px;
+  border: 1px dashed rgba(201,169,110,0.3);
+  border-radius: 4px;
+  padding: 20px 32px;
+  margin-bottom: 32px;
+  background: rgba(245,240,232,0.02);
+  animation: fadeUp 0.7s ease 0.72s both;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.ticket-from-to {
+  display: flex; align-items: center; gap: 16px;
+}
+.ticket-city {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px; font-weight: 800; color: white;
+  letter-spacing: 0.05em;
+}
+.ticket-city-sub {
+  font-size: 11px; color: rgba(245,240,232,0.35);
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.ticket-plane { font-size: 22px; color: var(--red); }
+.ticket-dates {
+  text-align: right;
+}
+.ticket-date-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--gold);
+}
+.ticket-date-label {
+  font-size: 10px; color: rgba(245,240,232,0.3);
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  nav, .page-header, .booking-main { padding-left: 24px; padding-right: 24px; }
+  .booking-layout { grid-template-columns: 1fr; }
+  .booking-sidebar { border-top: 1px solid var(--border); padding: 32px 24px; position: static; }
+  .cal-grid-wrap { grid-template-columns: 1fr; }
+  .cal-month-panel:last-child { display: none; }
+  .class-grid { grid-template-columns: 1fr; }
+  .steps { padding-left: 24px; padding-right: 24px; overflow-x: auto; }
+  .confirm-details { flex-direction: column; gap: 20px; padding: 24px; }
+  .confirm-actions { flex-direction: column; align-items: center; }
+  .ticket-strip { flex-direction: column; text-align: center; }
+  .ticket-dates { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+<nav>
+  <a href="cardinal-air.html" class="logo-mark">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+    </div>
+    <div class="logo-wordmark">
+      <span class="logo-primary">Cardinal Air</span>
+      <span class="logo-sub">Midwest Proud Since 2008</span>
+    </div>
+  </a>
+  <a href="cardinal-air.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- ── PAGE HEADER ─────────────────────────────────────────────── -->
+<div class="page-header">
+  <div class="page-eyebrow">Reserve Your Seat</div>
+  <h1 class="page-title">Book Your<br><em>Flight</em></h1>
+  <p class="page-sub">Select your route, dates, and class. We'll take care of the rest.</p>
+</div>
+
+<!-- ── STEP BAR ────────────────────────────────────────────────── -->
+<div class="steps">
+  <div class="step active" id="step1">
+    <div class="step-num">1</div> Route & Dates
+  </div>
+  <div class="step-sep"></div>
+  <div class="step" id="step2">
+    <div class="step-num">2</div> Class & Passengers
+  </div>
+  <div class="step-sep"></div>
+  <div class="step" id="step3">
+    <div class="step-num">3</div> Confirm
+  </div>
+</div>
+
+<!-- ── BOOKING LAYOUT ──────────────────────────────────────────── -->
+<div class="booking-layout">
+  <div class="booking-main">
+
+    <!-- ROUTE -->
+    <div class="form-section">
+      <div class="form-section-title">Route</div>
+      <div class="route-row">
+        <div class="field-wrap">
+          <label class="field-label">Flying From</label>
+          <select id="fromCity" onchange="updateSummary()">
+            <option value="">Select Origin</option>
+            <option value="Chicago, IL (ORD)">Chicago, IL (ORD)</option>
+            <option value="Indianapolis, IN (IND)">Indianapolis, IN (IND)</option>
+            <option value="St. Louis, MO (STL)">St. Louis, MO (STL)</option>
+            <option value="Detroit, MI (DTW)">Detroit, MI (DTW)</option>
+            <option value="Columbus, OH (CMH)">Columbus, OH (CMH)</option>
+            <option value="Minneapolis, MN (MSP)">Minneapolis, MN (MSP)</option>
+            <option value="Milwaukee, WI (MKE)">Milwaukee, WI (MKE)</option>
+            <option value="Kansas City, MO (MCI)">Kansas City, MO (MCI)</option>
+          </select>
+        </div>
+        <div class="route-arrow">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Flying To</label>
+          <select id="toCity" onchange="updateSummary()">
+            <option value="">Select Destination</option>
+            <option value="Kansas City, MO">Kansas City, MO</option>
+            <option value="Dallas, TX">Dallas, TX</option>
+            <option value="Orlando, FL">Orlando, FL</option>
+            <option value="Denver, CO">Denver, CO</option>
+            <option value="Las Vegas, NV">Las Vegas, NV</option>
+            <option value="Phoenix, AZ">Phoenix, AZ</option>
+            <option value="Nashville, TN">Nashville, TN</option>
+            <option value="Atlanta, GA">Atlanta, GA</option>
+            <option value="Charlotte, NC">Charlotte, NC</option>
+            <option value="Miami, FL">Miami, FL</option>
+            <option value="New York, NY (LGA)">New York, NY (LGA)</option>
+            <option value="Los Angeles, CA">Los Angeles, CA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-wrap" style="margin-top:12px;">
+        <label class="field-label">Trip Type</label>
+        <select id="tripType" onchange="toggleReturn()">
+          <option value="roundtrip">Round Trip</option>
+          <option value="oneway">One Way</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="form-section">
+      <div class="form-section-title">Select Dates</div>
+      <div class="cal-outer">
+        <div class="cal-tabs">
+          <button class="cal-tab active" id="tabDepart" onclick="setActiveTab('depart')">
+            Departure
+            <span class="cal-tab-date" id="departDisplay">— Select —</span>
+          </button>
+          <button class="cal-tab" id="tabReturn" onclick="setActiveTab('return')">
+            Return
+            <span class="cal-tab-date" id="returnDisplay">— Select —</span>
+          </button>
+        </div>
+
+        <div class="cal-grid-wrap" id="calGrid">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CLASS -->
+    <div class="form-section">
+      <div class="form-section-title">Cabin Class</div>
+      <div class="class-grid">
+        <div class="class-card selected" onclick="selectClass(this,'Economy','79')" data-class="Economy" data-price="79">
+          <div class="class-name">Economy</div>
+          <div class="class-price">$79 <span>/ person</span></div>
+          <div class="class-perks">1 carry-on · Snack service · Standard seat</div>
+        </div>
+        <div class="class-card" onclick="selectClass(this,'Cardinal Plus','139')" data-class="Cardinal Plus" data-price="139">
+          <div class="class-name">Cardinal Plus</div>
+          <div class="class-price">$139 <span>/ person</span></div>
+          <div class="class-perks">2 bags · Priority boarding · Extra legroom</div>
+        </div>
+        <div class="class-card" onclick="selectClass(this,'First Class','249')" data-class="First Class" data-price="249">
+          <div class="class-name">First Class</div>
+          <div class="class-price">$249 <span>/ person</span></div>
+          <div class="class-perks">Lie-flat · Premium dining · Dedicated lounge</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSENGERS -->
+    <div class="form-section">
+      <div class="form-section-title">Passengers</div>
+      <div class="passengers-row">
+        <div class="field-wrap">
+          <label class="field-label">Adults</label>
+          <input type="number" id="adults" value="1" min="1" max="9" oninput="updateSummary()">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Children (2-11)</label>
+          <input type="number" id="children" value="0" min="0" max="8" oninput="updateSummary()">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Infants (&lt;2)</label>
+          <input type="number" id="infants" value="0" min="0" max="4" oninput="updateSummary()">
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /booking-main -->
+
+  <!-- ── SIDEBAR ───────────────────────────────────────────────── -->
+  <div class="booking-sidebar">
+    <div class="sidebar-title">Your Booking Summary</div>
+
+    <div class="summary-route" id="summaryRoute">
+      <div>
+        <div class="summary-city" id="summaryFrom">—</div>
+        <div style="font-size:11px;color:rgba(245,240,232,0.3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;">Origin</div>
+      </div>
+      <div class="summary-arrow">✈</div>
+      <div>
+        <div class="summary-city" id="summaryTo">—</div>
+        <div style="font-size:11px;color:rgba(245,240,232,0.3);font-family:'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;">Destination</div>
+      </div>
+    </div>
+
+    <div class="summary-line">
+      <span class="summary-key">Depart</span>
+      <span class="summary-val empty" id="sumDepart">Not selected</span>
+    </div>
+    <div class="summary-line" id="returnRow">
+      <span class="summary-key">Return</span>
+      <span class="summary-val empty" id="sumReturn">Not selected</span>
+    </div>
+    <div class="summary-line">
+      <span class="summary-key">Class</span>
+      <span class="summary-val" id="sumClass">Economy</span>
+    </div>
+    <div class="summary-line">
+      <span class="summary-key">Passengers</span>
+      <span class="summary-val" id="sumPax">1 Adult</span>
+    </div>
+
+    <div class="price-total">
+      <div class="price-label">Estimated Total</div>
+      <div class="price-amount"><span>$</span><span id="totalPrice">79</span></div>
+      <div class="price-note">Taxes &amp; fees included. Final price confirmed at checkout.</div>
+    </div>
+
+    <button class="btn-book" id="btnBook" onclick="confirmBooking()">
+      Confirm &amp; Book
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+
+    <p class="sidebar-note">No payment required today. Lock in your fare and complete purchase within 24 hours.</p>
+  </div>
+
+</div><!-- /booking-layout -->
+
+
+<!-- ── CONFIRMATION OVERLAY ────────────────────────────────────── -->
+<div id="confirmationScreen">
+
+  <div class="confirm-bird">
+    <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+  </div>
+
+  <div class="confirm-check">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+
+  <div class="confirm-eyebrow">Booking Confirmed</div>
+
+  <h2 class="confirm-title">Your Flight Has<br>Been <em>Booked!</em></h2>
+
+  <p class="confirm-message">Thank you for flying with Cardinal Air. We can't wait to welcome you on board.</p>
+
+  <div class="ticket-strip" id="ticketStrip">
+    <div class="ticket-from-to">
+      <div>
+        <div class="ticket-city" id="ticketFrom">ORD</div>
+        <div class="ticket-city-sub" id="ticketFromFull">Chicago, IL</div>
+      </div>
+      <div class="ticket-plane">✈</div>
+      <div>
+        <div class="ticket-city" id="ticketTo">MCO</div>
+        <div class="ticket-city-sub" id="ticketToFull">Destination</div>
+      </div>
+    </div>
+    <div class="ticket-dates">
+      <div class="ticket-date-label">Departure</div>
+      <div class="ticket-date-val" id="ticketDepart">—</div>
+      <div style="height:10px;"></div>
+      <div class="ticket-date-label" id="ticketReturnLabel">Return</div>
+      <div class="ticket-date-val" id="ticketReturn">—</div>
+    </div>
+  </div>
+
+  <div class="confirm-code" id="confirmCode">CA-4829</div>
+  <div class="confirm-code-label">Booking Confirmation Number</div>
+
+  <div class="confirm-details">
+    <div class="confirm-detail">
+      <div class="confirm-detail-label">Cabin</div>
+      <div class="confirm-detail-val" id="confirmClass">Economy</div>
+    </div>
+    <div class="confirm-detail">
+      <div class="confirm-detail-label">Passengers</div>
+      <div class="confirm-detail-val" id="confirmPax">1 Adult</div>
+    </div>
+    <div class="confirm-detail">
+      <div class="confirm-detail-label">Total Fare</div>
+      <div class="confirm-detail-val" id="confirmTotal">$79</div>
+    </div>
+  </div>
+
+  <div class="confirm-actions">
+    <a href="cardinal-air.html" class="btn-outline">
+      ← Return to Homepage
+    </a>
+    <button class="btn-outline" onclick="window.print()">
+      🖨 Print Itinerary
+    </button>
+  </div>
+
+</div>
+
+
+<!-- ── JAVASCRIPT ──────────────────────────────────────────────── -->
+<script>
+/* ── STATE ──────────────────────────────────────────────────── */
+const state = {
+  activeTab:    'depart',
+  departDate:   null,
+  returnDate:   null,
+  selectedClass:'Economy',
+  basePrice:    79,
+  tripType:     'roundtrip',
+  calOffset:    0,      // months forward from today's month
+};
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+const DAYS   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+/* ── CALENDAR INIT ──────────────────────────────────────────── */
+function renderCalendar() {
+  const today    = new Date();
+  const left     = new Date(today.getFullYear(), today.getMonth() + state.calOffset, 1);
+  const right    = new Date(today.getFullYear(), today.getMonth() + state.calOffset + 1, 1);
+  const grid     = document.getElementById('calGrid');
+  grid.innerHTML = renderMonth(left, true) + renderMonth(right, false);
+}
+
+function renderMonth(firstDay, showPrev) {
+  const year  = firstDay.getFullYear();
+  const month = firstDay.getMonth();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startDow    = firstDay.getDay();
+
+  let html = `<div class="cal-month-panel">
+    <div class="cal-month-header">
+      ${showPrev ? `<button class="cal-nav-btn" onclick="shiftCal(-1)">&#8592;</button>` : '<div></div>'}
+      <div class="cal-month-name">${MONTHS[month]} ${year}</div>
+      ${!showPrev ? `<button class="cal-nav-btn" onclick="shiftCal(1)">&#8594;</button>` : '<div></div>'}
+    </div>
+    <div class="cal-dow">${DAYS.map(d=>`<span>${d}</span>`).join('')}</div>
+    <div class="cal-days">`;
+
+  // Empty cells before month start
+  for (let i = 0; i < startDow; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    date.setHours(0,0,0,0);
+    const isPast    = date < today;
+    const isToday   = date.getTime() === today.getTime();
+    const isStart   = state.departDate && date.getTime() === state.departDate.getTime();
+    const isEnd     = state.returnDate && date.getTime() === state.returnDate.getTime();
+    const inRange   = state.departDate && state.returnDate &&
+                      date > state.departDate && date < state.returnDate;
+    let cls = 'cal-day';
+    if (isPast)    cls += ' past';
+    if (isToday && !isPast) cls += ' today';
+    if (isStart)   cls += ' selected-start';
+    if (isEnd)     cls += ' selected-end';
+    if (inRange)   cls += ' in-range';
+
+    const iso = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    html += `<div class="${cls}" onclick="pickDay('${iso}')">${d}</div>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+function shiftCal(dir) {
+  state.calOffset = Math.max(0, state.calOffset + dir);
+  renderCalendar();
+}
+
+/* ── DATE PICKING ───────────────────────────────────────────── */
+function pickDay(iso) {
+  const date = new Date(iso + 'T00:00:00');
+  if (state.activeTab === 'depart') {
+    state.departDate = date;
+    // clear return if it's before new depart
+    if (state.returnDate && state.returnDate <= date) state.returnDate = null;
+    // auto switch to return tab on round trip
+    if (state.tripType === 'roundtrip') setActiveTab('return');
+  } else {
+    if (state.departDate && date <= state.departDate) return;
+    state.returnDate = date;
+    setActiveTab('depart');
+  }
+  updateDisplays();
+  renderCalendar();
+}
+
+function formatDate(d) {
+  if (!d) return null;
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+}
+
+function updateDisplays() {
+  const dd = state.departDate ? formatDate(state.departDate) : '— Select —';
+  const rd = state.returnDate ? formatDate(state.returnDate) : '— Select —';
+  document.getElementById('departDisplay').textContent = dd;
+  document.getElementById('returnDisplay').textContent = rd;
+  document.getElementById('sumDepart').textContent     = state.departDate ? formatDate(state.departDate) : 'Not selected';
+  document.getElementById('sumDepart').classList.toggle('empty', !state.departDate);
+  document.getElementById('sumReturn').textContent     = state.returnDate ? formatDate(state.returnDate) : 'Not selected';
+  document.getElementById('sumReturn').classList.toggle('empty', !state.returnDate);
+  updateTotal();
+}
+
+function setActiveTab(tab) {
+  state.activeTab = tab;
+  document.getElementById('tabDepart').classList.toggle('active', tab === 'depart');
+  document.getElementById('tabReturn').classList.toggle('active', tab === 'return');
+}
+
+/* ── TRIP TYPE ──────────────────────────────────────────────── */
+function toggleReturn() {
+  state.tripType = document.getElementById('tripType').value;
+  const returnRow = document.getElementById('returnRow');
+  const tabReturn = document.getElementById('tabReturn');
+  if (state.tripType === 'oneway') {
+    returnRow.style.display = 'none';
+    tabReturn.style.opacity = '0.3';
+    tabReturn.style.pointerEvents = 'none';
+    state.returnDate = null;
+    document.getElementById('returnDisplay').textContent = 'One Way';
+  } else {
+    returnRow.style.display = '';
+    tabReturn.style.opacity = '';
+    tabReturn.style.pointerEvents = '';
+  }
+  updateDisplays();
+  renderCalendar();
+}
+
+/* ── CLASS SELECT ───────────────────────────────────────────── */
+function selectClass(el, name, price) {
+  document.querySelectorAll('.class-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedClass = name;
+  state.basePrice     = parseInt(price);
+  document.getElementById('sumClass').textContent = name;
+  updateTotal();
+}
+
+/* ── SUMMARY ────────────────────────────────────────────────── */
+function updateSummary() {
+  const from = document.getElementById('fromCity').value;
+  const to   = document.getElementById('toCity').value;
+
+  // abbreviate city
+  function abbrev(str) {
+    if (!str) return '—';
+    const match = str.match(/\(([A-Z]+)\)/);
+    if (match) return match[1];
+    return str.split(',')[0].split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
+  }
+
+  document.getElementById('summaryFrom').textContent = abbrev(from);
+  document.getElementById('summaryTo').textContent   = abbrev(to);
+  updateTotal();
+}
+
+function updateTotal() {
+  const adults   = parseInt(document.getElementById('adults').value)   || 1;
+  const children = parseInt(document.getElementById('children').value) || 0;
+  const isRT     = state.tripType === 'roundtrip';
+  const pax      = adults + children;
+  const legs     = isRT ? 2 : 1;
+  const total    = state.basePrice * pax * legs;
+
+  document.getElementById('totalPrice').textContent = total;
+  const paxLabel = `${adults} Adult${adults>1?'s':''}${children?' + '+children+' Child'+( children>1?'ren':''):''}`;
+  document.getElementById('sumPax').textContent = paxLabel;
+
+  // update step indicators
+  const from = document.getElementById('fromCity').value;
+  const to   = document.getElementById('toCity').value;
+  const hasDates = state.departDate && (state.tripType === 'oneway' || state.returnDate);
+  if (from && to && hasDates) {
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('step2').classList.remove('done');
+    document.getElementById('step3').classList.add('active');
+  }
+
+  // enable/disable book button
+  const btn = document.getElementById('btnBook');
+  const canBook = from && to && state.departDate && (state.tripType==='oneway' || state.returnDate);
+  btn.disabled = !canBook;
+}
+
+/* ── CONFIRM ────────────────────────────────────────────────── */
+function confirmBooking() {
+  const from   = document.getElementById('fromCity').value;
+  const to     = document.getElementById('toCity').value;
+  const adults = document.getElementById('adults').value;
+  const children = document.getElementById('children').value;
+  const total  = document.getElementById('totalPrice').textContent;
+
+  function abbrev(str) {
+    if (!str) return '???';
+    const match = str.match(/\(([A-Z]+)\)/);
+    if (match) return match[1];
+    return str.split(',')[0].split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,3);
+  }
+  function cityName(str) {
+    if (!str) return '';
+    return str.replace(/\s*\([A-Z]+\)/, '').trim();
+  }
+
+  // generate confirmation code
+  const code = 'CA-' + Math.floor(1000 + Math.random() * 9000);
+
+  document.getElementById('confirmCode').textContent   = code;
+  document.getElementById('ticketFrom').textContent    = abbrev(from);
+  document.getElementById('ticketFromFull').textContent= cityName(from);
+  document.getElementById('ticketTo').textContent      = abbrev(to);
+  document.getElementById('ticketToFull').textContent  = cityName(to);
+  document.getElementById('ticketDepart').textContent  = formatDate(state.departDate);
+  document.getElementById('confirmClass').textContent  = state.selectedClass;
+  document.getElementById('confirmTotal').textContent  = '$' + total;
+
+  const paxLabel = `${adults} Adult${adults>1?'s':''}${children>0?' + '+children+' Child'+( children>1?'ren':''):''}`;
+  document.getElementById('confirmPax').textContent  = paxLabel;
+
+  if (state.tripType === 'roundtrip' && state.returnDate) {
+    document.getElementById('ticketReturn').textContent      = formatDate(state.returnDate);
+    document.getElementById('ticketReturnLabel').textContent = 'Return';
+  } else {
+    document.getElementById('ticketReturn').textContent      = 'One Way';
+    document.getElementById('ticketReturnLabel').textContent = 'Trip Type';
+  }
+
+  // Show screen
+  const screen = document.getElementById('confirmationScreen');
+  screen.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+/* ── INIT ────────────────────────────────────────────────────── */
+renderCalendar();
+updateSummary();
+</script>
+</body>
+</html>
