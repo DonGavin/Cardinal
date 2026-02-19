@@ -62,56 +62,6 @@
     gap: 16px;
   }
 
-  /* ─── EDITABLE NOTICE ────────────────────────────────────────── */
-  .editable-notice {
-    position: fixed;
-    bottom: 20px; right: 20px;
-    background: var(--red);
-    color: white;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    border-radius: 3px;
-    z-index: 9999;
-    opacity: 0.9;
-    cursor: default;
-  }
-
-  /* EDITABLE FIELDS */
-  [contenteditable="true"] {
-    outline: none;
-    transition: background 0.2s, box-shadow 0.2s;
-    border-radius: 3px;
-    cursor: text;
-  }
-  [contenteditable="true"]:hover {
-    background: rgba(201,169,110,0.08);
-    box-shadow: 0 0 0 1px rgba(201,169,110,0.3);
-  }
-  [contenteditable="true"]:focus {
-    background: rgba(201,169,110,0.12);
-    box-shadow: 0 0 0 2px rgba(201,169,110,0.5);
-  }
-  .edit-hint {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    opacity: 0;
-    display: block;
-    margin-top: 4px;
-    transition: opacity 0.2s;
-    pointer-events: none;
-  }
-  [contenteditable="true"]:hover + .edit-hint,
-  [contenteditable="true"]:focus + .edit-hint {
-    opacity: 0.7;
-  }
-
-
   /* ─── HERO ────────────────────────────────────────────────────── */
   .hero {
     min-height: 100vh;
@@ -756,10 +706,6 @@
 </head>
 <body>
 
-<!-- ── EDIT BADGE ─────────────────────────────────────────────── -->
-<div class="editable-notice">✎ Click any text to edit</div>
-
-
 <!-- ── HERO ───────────────────────────────────────────────────── -->
 <section class="hero">
   <nav class="hero-nav">
@@ -827,20 +773,17 @@
   </div>
 
   <div class="mission-right">
-    <p contenteditable="true">
+    <p>
       Cardinal Air exists to make air travel accessible, affordable, and genuinely enjoyable for every person in America's heartland. We believe that a flight from Chicago to Kansas City should feel just as special as any journey — because the destination matters, but so does how you get there.
     </p>
-    <span class="edit-hint">click to edit</span>
 
-    <p contenteditable="true">
+    <p>
       Founded in 2008 and headquartered in Chicago, Illinois, Cardinal Air has grown from a regional connector to a mid-size carrier serving over 40 destinations across the United States. We operate from major Midwest hubs including Chicago O'Hare, Indianapolis, St. Louis, and Detroit — bringing families, business travelers, and explorers together.
     </p>
-    <span class="edit-hint">click to edit</span>
 
-    <p contenteditable="true">
+    <p>
       Our commitment is simple: honest pricing, friendly crews, and a smooth experience from check-in to touchdown. We don't charge for what should be standard — we charge only for what's worth paying for.
     </p>
-    <span class="edit-hint">click to edit</span>
   </div>
 </section>
 
@@ -848,19 +791,19 @@
 <!-- ── STATS BAR ──────────────────────────────────────────────── -->
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-number" contenteditable="true">42<span>+</span></div>
+    <div class="stat-number">42<span>+</span></div>
     <div class="stat-label">Destinations</div>
   </div>
   <div class="stat-item">
-    <div class="stat-number" contenteditable="true">6<span>M</span></div>
+    <div class="stat-number">50<span>Thousand</span></div>
     <div class="stat-label">Passengers / Year</div>
   </div>
   <div class="stat-item">
-    <div class="stat-number" contenteditable="true">58</div>
+    <div class="stat-number">10</div>
     <div class="stat-label">Aircraft in Fleet</div>
   </div>
   <div class="stat-item">
-    <div class="stat-number" contenteditable="true">4</div>
+    <div class="stat-number">6</div>
     <div class="stat-label">Midwest Hubs</div>
   </div>
 </div>
@@ -870,7 +813,7 @@
 <section class="competencies" id="competencies">
   <div class="competencies-header">
     <h2>Core<br>Competencies</h2>
-    <p contenteditable="true">What sets Cardinal Air apart is not one big thing — it's everything we do consistently well. Here are the six pillars of our operation that keep passengers coming back.</p>
+    <p>What sets Cardinal Air apart is not one big thing — it's everything we do consistently well. Here are the six pillars of our operation that keep passengers coming back.</p>
   </div>
 
   <div class="competencies-grid">
@@ -878,43 +821,43 @@
     <div class="comp-card">
       <div class="comp-num">01</div>
       <div class="comp-icon">💰</div>
-      <div class="comp-title" contenteditable="true">Affordable Fares</div>
-      <div class="comp-desc" contenteditable="true">Transparent, competitive pricing with no hidden fees. We believe flying shouldn't require a second mortgage. Cardinal Air regularly offers the lowest base fares on Midwest routes.</div>
+      <div class="comp-title">Affordable Fares</div>
+      <div class="comp-desc">Transparent, competitive pricing with no hidden fees. We believe flying shouldn't require a second mortgage. Cardinal Air regularly offers the lowest base fares on Midwest routes.</div>
     </div>
 
     <div class="comp-card">
       <div class="comp-num">02</div>
       <div class="comp-icon">🛫</div>
-      <div class="comp-title" contenteditable="true">On-Time Performance</div>
-      <div class="comp-desc" contenteditable="true">We take punctuality personally. With a 91% on-time departure rate, Cardinal Air consistently ranks among the top carriers for schedule reliability.</div>
+      <div class="comp-title">On-Time Performance</div>
+      <div class="comp-desc">We take punctuality personally. With a 91% on-time departure rate, Cardinal Air consistently ranks among the top carriers for schedule reliability.</div>
     </div>
 
     <div class="comp-card">
       <div class="comp-num">03</div>
       <div class="comp-icon">🤝</div>
-      <div class="comp-title" contenteditable="true">Midwest Hospitality</div>
-      <div class="comp-desc" contenteditable="true">Our crew is trained in genuine, warm service. Not scripted, not corporate — real Midwest hospitality that makes passengers feel like neighbors, not numbers.</div>
+      <div class="comp-title">Midwest Hospitality</div>
+      <div class="comp-desc">Our crew is trained in genuine, warm service. Not scripted, not corporate — real Midwest hospitality that makes passengers feel like neighbors, not numbers.</div>
     </div>
 
     <div class="comp-card">
       <div class="comp-num">04</div>
       <div class="comp-icon">🌐</div>
-      <div class="comp-title" contenteditable="true">Route Connectivity</div>
-      <div class="comp-desc" contenteditable="true">Extensive connections across the Midwest and beyond. We link smaller regional cities that larger carriers overlook, providing vital air access to underserved communities.</div>
+      <div class="comp-title">Route Connectivity</div>
+      <div class="comp-desc">Extensive connections across the Midwest and beyond. We link smaller regional cities that larger carriers overlook, providing vital air access to underserved communities.</div>
     </div>
 
     <div class="comp-card">
       <div class="comp-num">05</div>
       <div class="comp-icon">✈️</div>
-      <div class="comp-title" contenteditable="true">Modern Fleet</div>
-      <div class="comp-desc" contenteditable="true">Our fleet of Boeing 737s and Airbus A220s averages just 6.2 years in age — one of the youngest in the industry. Newer planes mean better fuel efficiency and a quieter, more comfortable ride.</div>
+      <div class="comp-title">Modern Fleet</div>
+      <div class="comp-desc">Our fleet of B and A Planes averages just 6.2 years in age — one of the youngest in the industry. Newer planes mean better fuel efficiency and a quieter, more comfortable ride.</div>
     </div>
 
     <div class="comp-card">
       <div class="comp-num">06</div>
       <div class="comp-icon">📱</div>
-      <div class="comp-title" contenteditable="true">Seamless Digital Experience</div>
-      <div class="comp-desc" contenteditable="true">From mobile booking to real-time flight updates, Cardinal Air's app and web platform make managing your travel simple. Contactless check-in, digital boarding passes, and 24/7 support.</div>
+      <div class="comp-title">Seamless Digital Experience</div>
+      <div class="comp-desc">From mobile booking to real-time flight updates, Cardinal Air's app and web platform make managing your travel simple. Contactless check-in, digital boarding passes, and 24/7 support.</div>
     </div>
 
   </div>
@@ -939,62 +882,62 @@
     <tbody>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">Chicago, IL</div>
+          <div class="route-city">Chicago, IL</div>
           <div class="route-hub">ORD · Primary Hub</div>
         </td>
-        <td contenteditable="true">Kansas City, MO</td>
-        <td contenteditable="true">8</td>
-        <td contenteditable="true">$79</td>
+        <td>Kansas City, MO</td>
+        <td>8</td>
+        <td>$79</td>
         <td><span class="route-status status-active">Active</span></td>
       </tr>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">Indianapolis, IN</div>
+          <div class="route-city">Indianapolis, IN</div>
           <div class="route-hub">IND · Hub</div>
         </td>
-        <td contenteditable="true">Dallas, TX</td>
-        <td contenteditable="true">5</td>
-        <td contenteditable="true">$99</td>
+        <td>Dallas, TX</td>
+        <td>5</td>
+        <td>$99</td>
         <td><span class="route-status status-active">Active</span></td>
       </tr>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">St. Louis, MO</div>
+          <div class="route-city">St. Louis, MO</div>
           <div class="route-hub">STL · Hub</div>
         </td>
-        <td contenteditable="true">Orlando, FL</td>
-        <td contenteditable="true">4</td>
-        <td contenteditable="true">$119</td>
+        <td>Orlando, FL</td>
+        <td>4</td>
+        <td>$119</td>
         <td><span class="route-status status-active">Active</span></td>
       </tr>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">Detroit, MI</div>
+          <div class="route-city">Detroit, MI</div>
           <div class="route-hub">DTW · Hub</div>
         </td>
-        <td contenteditable="true">Denver, CO</td>
-        <td contenteditable="true">3</td>
-        <td contenteditable="true">$109</td>
+        <td>Denver, CO</td>
+        <td>3</td>
+        <td>$109</td>
         <td><span class="route-status status-new">New Route</span></td>
       </tr>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">Columbus, OH</div>
+          <div class="route-city">Columbus, OH</div>
           <div class="route-hub">CMH</div>
         </td>
-        <td contenteditable="true">Las Vegas, NV</td>
-        <td contenteditable="true">2</td>
-        <td contenteditable="true">$139</td>
+        <td>Las Vegas, NV</td>
+        <td>2</td>
+        <td>$139</td>
         <td><span class="route-status status-seasonal">Seasonal</span></td>
       </tr>
       <tr>
         <td>
-          <div class="route-city" contenteditable="true">Minneapolis, MN</div>
+          <div class="route-city">Minneapolis, MN</div>
           <div class="route-hub">MSP</div>
         </td>
-        <td contenteditable="true">Phoenix, AZ</td>
-        <td contenteditable="true">2</td>
-        <td contenteditable="true">$129</td>
+        <td>Phoenix, AZ</td>
+        <td>2</td>
+        <td>$129</td>
         <td><span class="route-status status-seasonal">Seasonal</span></td>
       </tr>
     </tbody>
@@ -1007,13 +950,13 @@
   <div class="about-main">
     <div class="section-label">Company Profile</div>
     <h2>About<br>Cardinal <em>Air</em></h2>
-    <p contenteditable="true">
+    <p>
       Cardinal Air is a mid-level to budget regional carrier proudly rooted in the American Midwest. Since our founding, we've championed the idea that every traveler deserves a reliable, comfortable flight at a fair price — without the complexity of legacy carriers or the austerity of ultra-low-cost competitors.
     </p>
-    <p contenteditable="true">
-      We operate a single-aisle fleet focused on efficiency, which allows us to keep fares low while maintaining service quality. Our loyalty program, Cardinal Rewards, has over 1.2 million members who earn points on every flight, hotel stay, and partner purchase.
+    <p>
+      We operate a single-aisle fleet focused on efficiency, which allows us to keep fares low while maintaining service quality. Our loyalty program, Cardinal Rewards, has over 20 thousand members who earn points on every flight, hotel stay, and partner purchase.
     </p>
-    <p contenteditable="true">
+    <p>
       Environmental responsibility is a growing focus. We are committed to a 30% reduction in carbon emissions per seat by 2030 through fleet renewal, sustainable fuel partnerships, and operational efficiency improvements.
     </p>
   </div>
@@ -1023,43 +966,43 @@
 
     <div class="fact-item">
       <span class="fact-key">Founded</span>
-      <span class="fact-val" contenteditable="true">2008</span>
+      <span class="fact-val">2008</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Headquarters</span>
-      <span class="fact-val" contenteditable="true">Chicago, IL</span>
+      <span class="fact-val">Chicago, IL</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">CEO</span>
-      <span class="fact-val" contenteditable="true">Margaret L. Harrow</span>
+      <span class="fact-val">Gavin J. Donlevy</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Employees</span>
-      <span class="fact-val" contenteditable="true">4,200+</span>
+      <span class="fact-val">4,200+</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Fleet Size</span>
-      <span class="fact-val" contenteditable="true">58 Aircraft</span>
+      <span class="fact-val">10 Aircraft</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Fleet Type</span>
-      <span class="fact-val" contenteditable="true">B737 / A220</span>
+      <span class="fact-val">B / A</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Avg. Fleet Age</span>
-      <span class="fact-val" contenteditable="true">6.2 Years</span>
+      <span class="fact-val">6.2 Years</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">IATA Code</span>
-      <span class="fact-val" contenteditable="true">CDL</span>
+      <span class="fact-val">CDL</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">Loyalty Program</span>
-      <span class="fact-val" contenteditable="true">Cardinal Rewards</span>
+      <span class="fact-val">Cardinal Rewards</span>
     </div>
     <div class="fact-item">
       <span class="fact-key">On-Time Rate</span>
-      <span class="fact-val" contenteditable="true">91%</span>
+      <span class="fact-val">91%</span>
     </div>
   </div>
 </section>
@@ -1080,7 +1023,7 @@
           <span class="logo-sub">Midwest Proud Since 2008</span>
         </div>
       </div>
-      <p contenteditable="true">Connecting the heartland and beyond. Affordable fares, genuine service, and a flight experience you'll actually enjoy.</p>
+      <p>Connecting the heartland and beyond. Affordable fares, genuine service, and a flight experience you'll actually enjoy.</p>
     </div>
 
     <div class="footer-col">
@@ -1097,11 +1040,11 @@
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li contenteditable="true">About Cardinal Air</li>
-        <li contenteditable="true">Newsroom</li>
-        <li contenteditable="true">Careers</li>
-        <li contenteditable="true">Investor Relations</li>
-        <li contenteditable="true">Sustainability</li>
+        <li>About Cardinal Air</li>
+        <li>Newsroom</li>
+        <li>Careers</li>
+        <li>Investor Relations</li>
+        <li>Sustainability</li>
       </ul>
     </div>
 
@@ -1118,7 +1061,7 @@
   </div>
 
   <div class="footer-bottom">
-    <span class="footer-copy" contenteditable="true">© 2025 Cardinal Air, Inc. All Rights Reserved. Chicago, Illinois.</span>
+    <span class="footer-copy">© 2025 Cardinal Air, Inc. All Rights Reserved. Chicago, Illinois.</span>
     <span class="footer-tag">Let's Travel the World Together</span>
   </div>
 </footer>
